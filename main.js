@@ -62,11 +62,11 @@ function amountFor(aPerformance) {
   return result;
 }
 
-function volumeCreditsFor(perf){
+function volumeCreditsFor(aPerformance){
     let volumeCredits = 0;
     // ボリューム特典のポイントを加算
-    volumeCredits += Math.max(perf.audience - 30, 0);
+    volumeCredits += Math.max(aPerformance.audience - 30, 0);
     // 喜劇のときは 10人につき、 さらにポイントを加算
-    if ("comedy" === playFor(perf).type) volumeCredits += Math.floor(perf.audience / 5);
+    if ("comedy" === playFor(aPerformance).type) volumeCredits += Math.floor(aPerformance.audience / 5);
     return volumeCredits;
 }
