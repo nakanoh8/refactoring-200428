@@ -11,20 +11,18 @@ console.log('>>>> Test Green');
 function statement(invoice, plays) {
   let totalAmount = 0;
   let volumeCredits = 0;
-  let result = "Statement for ${invoice.customer}\n";
+  let result = `Statement for ${invoice.customer}\n`;
 
-  const format = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
+  const format = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
     minimumFractionDigits: 2,
   }).format;
 
   for (let perf of invoice.performances) {
-      
-    // ボリューム特典のポイントを加算
-    volumeCredits += Math.max(perf.audience - 30, 0);
-    // 喜劇のときは 10人につき、 さらにポイントを加算
-    if ("comedy" === playFor(perf).type) volumeCredits += Math.floor(perf.audience / 5);
+
+    volumeCredits += volumeCreditsFor(perf);
+
     // 注文の内訳を出力
     result += ` ${playFor(perf).name}: ${format(amountFor(perf) / 100)} (${
       perf.audience
@@ -62,4 +60,13 @@ function amountFor(aPerformance) {
       throw new Error(`unknown type: ${playFor(aPerformance).type}`);
   }
   return result;
+}
+
+function volumeCreditsFor(perf){
+    let volumeCredits = 0;
+    // ボリューム特典のポイントを加算
+    volumeCredits += Math.max(perf.audience - 30, 0);
+    // 喜劇のときは 10人につき、 さらにポイントを加算
+    if ("comedy" === playFor(perf).type) volumeCredits += Math.floor(perf.audience / 5);
+    return volumeCredits;
 }
