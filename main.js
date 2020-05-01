@@ -5,6 +5,9 @@ let plays = require("./plays.json");
 
 console.log(statement(invoices[0], plays));
 
+console.log('>>>> Test Green');
+
+
 function statement(invoice, plays) {
   let totalAmount = 0;
   let volumeCredits = 0;
@@ -18,7 +21,7 @@ function statement(invoice, plays) {
 
   for (let perf of invoice.performances) {
 
-    let thisAmount = amountFor(perf, playFor(perf));
+    let thisAmount = amountFor(perf);
 
     // ボリューム特典のポイントを加算
     volumeCredits += Math.max(perf.audience - 30, 0);
@@ -41,7 +44,7 @@ function playFor(aPerformance){
     return plays[aPerformance.playID];
 }
 
-function amountFor(aPerformance, play) {
+function amountFor(aPerformance) {
   let result = 0;
   switch (playFor(aPerformance).type) {
     case "tragedy":
