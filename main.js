@@ -8,10 +8,10 @@ console.log(statement(invoices[0], plays));
 console.log(">>>> Test Green");
 
 function statement(invoice, plays) {
-  return renderPlainText(createStatement(invoice, plays));
+  return renderPlainText(createStatementData(invoice, plays));
 }
 
-function createStatement(invoice, plays) {
+function createStatementData(invoice, plays) {
   const statementData = {};
   statementData.customer = invoice.customer;
   statementData.performances = invoice.performances.map(enrichPerformance);
