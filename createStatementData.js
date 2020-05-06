@@ -9,7 +9,7 @@ export default function createStatementData(invoice, plays) {
   //中間データ構造に対する値を設定
   function enrichPerformance(aPerformance) {
     const result = Object.assign({}, aPerformance);
-    const calculator = new PerformanceCalculator(
+    const calculator = new createPerformanceCalculator(
       aPerformance,
       playFor(aPerformance)
     );
@@ -19,24 +19,28 @@ export default function createStatementData(invoice, plays) {
     return result;
   }
 
+  function createPerformanceCalculator(aPerformance, aPlay){
+    return new PerformanceCalculator(aPerformance, aPlay);
+  }
+
   function playFor(aPerformance) {
     return plays[aPerformance.playID];
   }
 
-  //委譲する
-  function amountFor(aPerformance) {
-    return new PerformanceCalculator(aPerformance, playFor(aPerformance)).amount;
-  }
+//   //委譲する
+//   function amountFor(aPerformance) {
+//     return new PerformanceCalculator(aPerformance, playFor(aPerformance)).amount;
+//   }
 
-  function volumeCreditsFor(aPerformance) {
-    let result = 0;
-    // ボリューム特典のポイントを加算
-    result += Math.max(aPerformance.audience - 30, 0);
-    // 喜劇のときは 10人につき、 さらにポイントを加算
-    if ("comedy" === aPerformance.play.type)
-      result += Math.floor(aPerformance.audience / 5);
-    return result;
-  }
+//   function volumeCreditsFor(aPerformance) {
+//     let result = 0;
+//     // ボリューム特典のポイントを加算
+//     result += Math.max(aPerformance.audience - 30, 0);
+//     // 喜劇のときは 10人につき、 さらにポイントを加算
+//     if ("comedy" === aPerformance.play.type)
+//       result += Math.floor(aPerformance.audience / 5);
+//     return result;
+//   }
 
   function totalVolumeCredits(data) {
     return data.performances.reduce((total, p) => total + p.volumeCredits, 0);
