@@ -6,8 +6,10 @@ export default function createStatementData(invoice, plays) {
     result.totalVolumeCredits = totalVolumeCredits(result);
     return result;
   
+    //中間データ構造に対する値を設定
     function enrichPerformance(aPerformance) {
       const result = Object.assign({}, aPerformance);
+      const calculator = new PerformanceCalculator(aPerformance);
       result.play = playFor(aPerformance);
       result.amount = amountFor(result);
       result.volumeCredits = volumeCreditsFor(result);
@@ -56,5 +58,11 @@ export default function createStatementData(invoice, plays) {
   
     function totalAmount(data){
       return data.performances.reduce((total, p) => total + p.amount, 0);
+    }
+}
+
+class PerformanceCalculator{
+    constructor(aPerformance){
+        this.performance = aPerformance;
     }
 }
