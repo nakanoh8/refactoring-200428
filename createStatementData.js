@@ -19,28 +19,20 @@ export default function createStatementData(invoice, plays) {
     return result;
   }
 
-  function createPerformanceCalculator(aPerformance, aPlay){
-    return new PerformanceCalculator(aPerformance, aPlay);
+  function createPerformanceCalculator(aPerformance, aPlay) {
+    switch (aPlay.type) {
+      case "tragedy":
+        return new TragedyCalculator(aPerformance, aPlay);
+      case "comedy":
+        return new ComedyCalculator(aPerformance, aPlay);
+      default:
+        throw new Error(` 未知の演劇の種類: ${aPlay.type}`);
+    }
   }
 
   function playFor(aPerformance) {
     return plays[aPerformance.playID];
   }
-
-//   //委譲する
-//   function amountFor(aPerformance) {
-//     return new PerformanceCalculator(aPerformance, playFor(aPerformance)).amount;
-//   }
-
-//   function volumeCreditsFor(aPerformance) {
-//     let result = 0;
-//     // ボリューム特典のポイントを加算
-//     result += Math.max(aPerformance.audience - 30, 0);
-//     // 喜劇のときは 10人につき、 さらにポイントを加算
-//     if ("comedy" === aPerformance.play.type)
-//       result += Math.floor(aPerformance.audience / 5);
-//     return result;
-//   }
 
   function totalVolumeCredits(data) {
     return data.performances.reduce((total, p) => total + p.volumeCredits, 0);
@@ -62,11 +54,7 @@ class PerformanceCalculator {
     let result = 0;
     switch (this.play.type) {
       case "tragedy":
-        result = 40000;
-        if (this.performance.audience > 30) {
-          result += 1000 * (this.performance.audience - 30);
-        }
-        break;
+        throw "想定外の呼び出し";
       case "comedy":
         result = 30000;
         if (this.performance.audience > 20) {
@@ -90,3 +78,15 @@ class PerformanceCalculator {
     return result;
   }
 }
+
+class TragedyCalculator extends PerformanceCalculator {
+  get amount() {
+    let result = 4000;
+    if (this.performance.audience > 30) {
+      result += 1000 * (this.performance.audience - 30);
+    }
+    return result;
+  }
+}
+
+class ComedyCalculator extends PerformanceCalculator {}
