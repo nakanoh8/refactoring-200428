@@ -14,8 +14,8 @@ export default function createStatementData(invoice, plays) {
       playFor(aPerformance)
     );
     result.play = calculator.play;
-    result.amount = amountFor(result);
-    result.volumeCredits = volumeCreditsFor(result);
+    result.amount = calculator.amount;
+    result.volumeCredits = calculator.volumeCredits;
     return result;
   }
 
@@ -54,7 +54,7 @@ class PerformanceCalculator {
     this.play = aPlay;
   }
 
-  get amountFor() {
+  get amount() {
     let result = 0;
     switch (this.play.type) {
       case "tragedy":
@@ -73,6 +73,16 @@ class PerformanceCalculator {
       default:
         throw new Error(`unknown type: ${this.play.type}`);
     }
+    return result;
+  }
+
+  get volumeCredits() {
+    let result = 0;
+    // ボリューム特典のポイントを加算
+    result += Math.max(this.performance.audience - 30, 0);
+    // 喜劇のときは 10人につき、 さらにポイントを加算
+    if ("comedy" === this.play.type)
+      result += Math.floor(this.performance.audience / 5);
     return result;
   }
 }
