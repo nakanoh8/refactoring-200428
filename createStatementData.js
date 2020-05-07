@@ -55,13 +55,7 @@ class PerformanceCalculator {
   }
 
   get volumeCredits() {
-    let result = 0;
-    // ボリューム特典のポイントを加算
-    result += Math.max(this.performance.audience - 30, 0);
-    // 喜劇のときは 10人につき、 さらにポイントを加算
-    if ("comedy" === this.play.type)
-      result += Math.floor(this.performance.audience / 5);
-    return result;
+    return Math.max(this.performance.audience - 30, 0);
   }
 }
 
@@ -82,5 +76,10 @@ class ComedyCalculator extends PerformanceCalculator {
       result += 10000 + 500 * (this.performance.audience - 20);
     }
     return result;
+  }
+
+  get volumeCredits() {
+    // 喜劇のときは 10人につき、 さらにポイントを加算
+    return super.volumeCredits + Math.floor(this.performance.audience / 5)
   }
 }
