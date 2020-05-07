@@ -51,21 +51,7 @@ class PerformanceCalculator {
   }
 
   get amount() {
-    let result = 0;
-    switch (this.play.type) {
-      case "tragedy":
-        throw "想定外の呼び出し";
-      case "comedy":
-        result = 30000;
-        if (this.performance.audience > 20) {
-          result += 10000 + 500 * (this.performance.audience - 20);
-        }
-        result += 300 * this.performance.audience;
-        break;
-      default:
-        throw new Error(`unknown type: ${this.play.type}`);
-    }
-    return result;
+    throw "想定外の呼び出し";
   }
 
   get volumeCredits() {
@@ -81,7 +67,7 @@ class PerformanceCalculator {
 
 class TragedyCalculator extends PerformanceCalculator {
   get amount() {
-    let result = 4000;
+    let result = 40000;
     if (this.performance.audience > 30) {
       result += 1000 * (this.performance.audience - 30);
     }
@@ -89,4 +75,12 @@ class TragedyCalculator extends PerformanceCalculator {
   }
 }
 
-class ComedyCalculator extends PerformanceCalculator {}
+class ComedyCalculator extends PerformanceCalculator {
+  get amount() {
+    let result = 3000;
+    if (this.performance.audience > 20) {
+      result += 10000 + 500 * (this.performance.audience - 20);
+    }
+    return result;
+  }
+}
