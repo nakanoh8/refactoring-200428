@@ -6,13 +6,13 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 let invoices = require('../../data/invoices.json');
 let plays = require('../../data/plays.json');
-// console.log(statement(invoices[0], plays));
+console.log(statement(invoices[0], plays));
 
 
-function statement(invoice, plays) {
+export function statement(invoice, plays) {
     let totalAmount = 0;
     let volumeCredits = 0;
-    let result = "Statement for ${invoice.customer}¥n";
+    let result = `Statement for ${invoice.customer}\n`;
 
     const format = new Intl.NumberFormat('en-US', {
         style: 'currency', currency: 'USD', minimumFractionDigits: 2
