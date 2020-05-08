@@ -11,8 +11,19 @@ import { createRequire } from "module";
 export function statement(invoice, plays) {
     const statementData = {};
     statementData.customer = invoice.customer;
-    statementData.performances = invoice.performances;
+    statementData.performances = invoice.performances.map(enrichPerformance);
     return renderPlainText(statementData, plays);
+
+    // performanceごとにシャローコピーし、情報を追加する
+    function enrichPerformance(aPerformances){
+        const result = Object.assign({}, aPerformances);
+        result.play = playFor(result);
+        return result;
+    }
+
+    function playFor(aPerformances) {
+        return plays[aPerformances.playID];
+      }
 }
 
 export function renderPlainText(data, plays) {
@@ -20,7 +31,7 @@ export function renderPlainText(data, plays) {
 
   for (let perf of data.performances) {
     // 注文の内訳を出力
-    result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
+    result += ` ${perf.play.name}: ${usd(amountFor(perf))} (${
       perf.audience
     } seats)\n`;
   }
@@ -32,7 +43,7 @@ export function renderPlainText(data, plays) {
 
   function amountFor(aPerformances) {
     let result = 0;
-    switch (playFor(aPerformances).type) {
+    switch (aPerformances.play.type) {
       case "tragedy":
         result = 40000;
         if (aPerformances.audience > 30) {
@@ -47,19 +58,15 @@ export function renderPlainText(data, plays) {
         result += 300 * aPerformances.audience;
         break;
       default:
-        throw new Error(`unknown type: ${playFor(aPerformances).type}`);
+        throw new Error(`unknown type: ${aPerformances.play.type}`);
     }
     return result;
-  }
-
-  function playFor(aPerformances) {
-    return plays[aPerformances.playID];
   }
 
   function volumeCreditsFor(aPerformances) {
     let result = 0;
     result += Math.max(aPerformances.audience - 30, 0);
-    if ("comedy" === playFor(aPerformances).type)
+    if ("comedy" === aPerformances.play.type)
       result += Math.floor(aPerformances.audience / 5);
     return result;
   }
