@@ -5,9 +5,9 @@ import { createRequire } from "module";
  * JSONデータ読み込み
  */
 const require = createRequire(import.meta.url);
-let invoices = require("./invoices.json");
+let invoices = require("./data/invoices.json");
 // console.log(invoices);
-let plays = require("./plays.json");
+let plays = require("./data/plays.json");
 // console.log(plays);
 /*
  * statement()テスト
