@@ -3,12 +3,16 @@ import { createRequire } from "module";
 /*
  * JSONデータ読み込み
  */
-const require = createRequire(import.meta.url);
-let invoices = require("../../data/invoices.json");
-let plays = require("../../data/plays.json");
+// const require = createRequire(import.meta.url);
+// let invoices = require("../../data/invoices.json");
+// let plays = require("../../data/plays.json");
 // console.log(statement(invoices[0], plays));
 
 export function statement(invoice, plays) {
+    return renderPlainText(invoice, plays);
+}
+
+export function renderPlainText(invoice, plays) {
   let result = `Statement for ${invoice.customer}\n`;
 
   for (let perf of invoice.performances) {
