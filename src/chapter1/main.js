@@ -6,7 +6,7 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 let invoices = require('../../data/invoices.json');
 let plays = require('../../data/plays.json');
-console.log(statement(invoices[0], plays));
+// console.log(statement(invoices[0], plays));
 
 
 export function statement(invoice, plays) {
