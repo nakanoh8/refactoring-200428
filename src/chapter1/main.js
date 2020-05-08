@@ -9,37 +9,22 @@ import { createRequire } from "module";
 // console.log(statement(invoices[0], plays));
 
 export function statement(invoice, plays) {
-    const statementData = {};
-    statementData.customer = invoice.customer;
-    statementData.performances = invoice.performances.map(enrichPerformance);
-    return renderPlainText(statementData, plays);
+  const statementData = {};
+  statementData.customer = invoice.customer;
+  statementData.performances = invoice.performances.map(enrichPerformance);
+  return renderPlainText(statementData, plays);
 
-    // performanceごとにシャローコピーし、情報を追加する
-    function enrichPerformance(aPerformances){
-        const result = Object.assign({}, aPerformances);
-        result.play = playFor(result);
-        return result;
-    }
-
-    function playFor(aPerformances) {
-        return plays[aPerformances.playID];
-      }
-}
-
-export function renderPlainText(data, plays) {
-  let result = `Statement for ${data.customer}\n`;
-
-  for (let perf of data.performances) {
-    // 注文の内訳を出力
-    result += ` ${perf.play.name}: ${usd(amountFor(perf))} (${
-      perf.audience
-    } seats)\n`;
+  // performanceごとにシャローコピーし、情報を追加する
+  function enrichPerformance(aPerformances) {
+    const result = Object.assign({}, aPerformances);
+    result.play = playFor(result);
+    result.amount = amountFor(result);
+    return result;
   }
 
-  result += `Amount owed is ${usd(totalAmount())}\n`;
-  result += `You earned ${totalVolumeCredits()} credits\n`;
-
-  return result;
+  function playFor(aPerformances) {
+    return plays[aPerformances.playID];
+  }
 
   function amountFor(aPerformances) {
     let result = 0;
@@ -62,6 +47,21 @@ export function renderPlainText(data, plays) {
     }
     return result;
   }
+}
+
+export function renderPlainText(data, plays) {
+  let result = `Statement for ${data.customer}\n`;
+
+  for (let perf of data.performances) {
+    // 注文の内訳を出力
+    result += ` ${perf.play.name}: ${usd(perf.amount)} (${
+      perf.audience
+    } seats)\n`;
+  }
+
+  result += `Amount owed is ${usd(totalAmount())}\n`;
+  result += `You earned ${totalVolumeCredits()} credits\n`;
+  return result;
 
   function volumeCreditsFor(aPerformances) {
     let result = 0;
@@ -82,15 +82,15 @@ export function renderPlainText(data, plays) {
   function totalVolumeCredits() {
     let result = 0;
     for (let perf of data.performances) {
-        result += volumeCreditsFor(perf);
+      result += volumeCreditsFor(perf);
     }
     return result;
   }
 
-  function totalAmount(){
+  function totalAmount() {
     let result = 0;
     for (let perf of data.performances) {
-        result += amountFor(perf);
+      result += perf.amount;
     }
     return result;
   }
