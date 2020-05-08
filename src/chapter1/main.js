@@ -11,8 +11,14 @@ let plays = require("../../data/plays.json");
 export function statement(invoice, plays) {
   let result = `Statement for ${invoice.customer}\n`;
 
-  let totalAmount = appleSauce();
-  result += `Amount owed is ${usd(totalAmount)}\n`;
+  for (let perf of invoice.performances) {
+    // 注文の内訳を出力
+    result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
+      perf.audience
+    } seats)\n`;
+  }
+
+  result += `Amount owed is ${usd(totalAmount())}\n`;
   result += `You earned ${totalVolumeCredits()} credits\n`;
 
   return result;
@@ -67,13 +73,9 @@ export function statement(invoice, plays) {
     return volumeCredits;
   }
 
-  function appleSauce(){
+  function totalAmount(){
     let totalAmount = 0;
     for (let perf of invoice.performances) {
-      // 注文の内訳を出力
-      result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
-        perf.audience
-      } seats)\n`;
       totalAmount += amountFor(perf);
     }
     return totalAmount;
