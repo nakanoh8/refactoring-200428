@@ -9,11 +9,13 @@ import { createRequire } from "module";
 // console.log(statement(invoices[0], plays));
 
 export function statement(invoice, plays) {
-    return renderPlainText(invoice, plays);
+    const statementData = {};
+    statementData.customer = invoice.customer;
+    return renderPlainText(statementData, invoice, plays);
 }
 
-export function renderPlainText(invoice, plays) {
-  let result = `Statement for ${invoice.customer}\n`;
+export function renderPlainText(data, invoice, plays) {
+  let result = `Statement for ${data.customer}\n`;
 
   for (let perf of invoice.performances) {
     // 注文の内訳を出力
