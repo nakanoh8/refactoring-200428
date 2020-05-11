@@ -18,6 +18,7 @@
             "request": "launch",
             "name": "Mocha",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": ["test/chapter1"]
           }
     ]
 }
