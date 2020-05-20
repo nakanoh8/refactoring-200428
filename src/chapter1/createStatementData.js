@@ -8,7 +8,7 @@ export function createStatementData(invoice, plays) {
   
     // performanceごとにシャローコピーし、情報を追加する
     function enrichPerformance(aPerformances) {
-      const result = Object.assign({}, aPerformances);
+      const result = Object.assign({}, aPerformances); //ディープコピーのように使っている？
       result.play = playFor(result);
       result.amount = amountFor(result);
       result.volumeCredits = volumeCreditsFor(result);
