@@ -8,8 +8,9 @@ export function createStatementData(invoice, plays) {
   
     // performanceごとにシャローコピーし、情報を追加する
     function enrichPerformance(aPerformances) {
+      const calculator = new PerformanceCalculator(aPerformances, playFor(aPerformances));
       const result = Object.assign({}, aPerformances); //ディープコピーのように使っている？
-      result.play = playFor(result);
+      result.play = calculator.play;
       result.amount = amountFor(result);
       result.volumeCredits = volumeCreditsFor(result);
       return result;
@@ -63,5 +64,12 @@ export function createStatementData(invoice, plays) {
         result += perf.amount;
       }
       return result;
+    }
+  }
+
+  class PerformanceCalculator{
+    constructor(aPerformances, aPlay){
+      this.performances = aPerformances;
+      this.play = aPlay;
     }
   }
