@@ -1,4 +1,4 @@
-export class Province {
+export class Province { //chiiki
   constructor(doc) {
     this._name = doc.name;
     this._producers = [];
@@ -24,10 +24,10 @@ export class Province {
   set totalProduction(arg) {
     this._totalProduction = arg;
   }
-  get demand() {
+  get demand() { //juyou
     return this._demand;
   }
-  set demand(arg) {
+  set demand(arg) { //juyou
     this._demand = parseInt(arg);
   }
   get price() {
@@ -36,30 +36,30 @@ export class Province {
   set price(arg) {
     this._price = parseInt(arg);
   }
-  get shortfall() {
+  get shortfall() { //husoku
     return this._demand - this.totalProduction;
   }
 
   get profit() {
-    return this.demandValue - this.demandCost;
+    return this.demandValue - this.demandCost; //total_uriage - total_shiharai
   }
-  get demandCost() {
+  get demandCost() { //total_shiharai = (cost * seisanryou) + ...seisansyabun
     let remainingDemand = this.demand;
     let result = 0;
     this.producers
-      .sort((a, b) => a.cost - b.cost)
+      .sort((a, b) => a.cost - b.cost) //コストの安い生産者から順に生産を依頼する
       .forEach((p) => {
-        const contribution = Math.min(remainingDemand, p.production);
+        const contribution = Math.min(remainingDemand, p.production); //需要以上は生産しない
         remainingDemand -= contribution;
         result += contribution * p.cost;
       });
     return result;
   }
-  get demandValue() {
+  get demandValue() { //total_uriage = total_seisanryou * kakaku
     return this.satisfiedDemand * this.price;
   }
-  get satisfiedDemand() {
-    return Math.min(this.demand, this.totalProduction);
+  get satisfiedDemand() { //total_seisanryou
+    return Math.min(this.demand, this.totalProduction); //需要以上生産したら売れない
   }
 }
 
