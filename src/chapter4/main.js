@@ -43,7 +43,7 @@ export class Province { //chiiki
   get profit() {
     return this.demandValue - this.demandCost; //total_uriage - total_shiharai
   }
-  get demandCost() { //total_shiharai = (cost * seisanryou) + ...seisansyabun
+  get demandCost() { //支払いの合計：total_shiharai = (cost * seisanryou) + ...seisansyabun
     let remainingDemand = this.demand;
     let result = 0;
     this.producers
